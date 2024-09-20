@@ -21,6 +21,7 @@ npm instal dayjs --save
 
 npm install antd-img-crop
 
+npm install react-bootstrap bootstrap   
 npm run dev
 
 

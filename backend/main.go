@@ -69,7 +69,8 @@ func main() {
 
     authorized.DELETE("/booking/:id", booking.Delete)
 
-    authorized.GET("payment/options", payment.CreatePayment)
+    authorized.GET("/Payment/options/QRcode", payment.CreatePayment)
+    authorized.GET("/Payment/options/DebitCard", payment.CreatePayment)
     authorized.GET("/Rating",rating.CreateRating)
 
 
