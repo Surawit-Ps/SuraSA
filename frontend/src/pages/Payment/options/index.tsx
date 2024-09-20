@@ -4,8 +4,8 @@ import './payment.css';
 import Card from 'react-bootstrap/Card';
 
 // Import images
-import PromptPayLogo from 'C:/ui/f-end/src/assets/PromptPay-logo.PNG';
-import debit from 'C:/ui/f-end/src/assets/debit.png';
+import PromptPayLogo from '../../../assets/PromptP.png';
+import debit from '../../../assets/DebitCard.png';
 
 const PaymentOptions: React.FC = () => {
     const location = useLocation();

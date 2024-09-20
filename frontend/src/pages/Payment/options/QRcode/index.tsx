@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import imd from 'C:/ui/f-end/src/assets/QR.png';
+import imd from '../../../../assets/QRcode.png'
 import './index.css'; // Import the CSS file
 import 'bootstrap/dist/css/bootstrap.min.css';
 

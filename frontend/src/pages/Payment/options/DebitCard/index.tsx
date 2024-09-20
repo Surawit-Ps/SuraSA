@@ -4,10 +4,9 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Card from 'antd/es/card/Card';
-import debit from 'C:/ui/f-end/src/assets/debit.png';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-
+import debit from '../../../../assets/DebitCard.png'
 const DebitCard: React.FC = () => {
   const [validated, setValidated] = useState(false);
   const navigate = useNavigate(); // Hook for navigation
