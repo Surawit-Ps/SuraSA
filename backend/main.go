@@ -69,14 +69,16 @@ func main() {
 
     authorized.DELETE("/booking/:id", booking.Delete)
 
-    authorized.GET("/Payment/options/QRcode", payment.CreatePayment)
-    authorized.GET("/Payment/options/DebitCard", payment.CreatePayment)
-    authorized.GET("/Rating",rating.CreateRating)
+    authorized.GET("/works/:workID", work.GetWagesByWorkID) // POST for creating rating
+
+    authorized.POST("/Payment", payment.CreatePayment) // POST for creating payment
+	authorized.POST("/Rating", rating.CreateRating) // POST for creating rating
 
 
     r.GET("/", func(c *gin.Context) {
         c.String(http.StatusOK, "API RUNNING... PORT: %s", PORT)
     })
+
 
     r.Run("localhost:" + PORT)
 }

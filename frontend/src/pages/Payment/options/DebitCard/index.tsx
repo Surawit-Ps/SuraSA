@@ -4,22 +4,50 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Card from 'antd/es/card/Card';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import debit from '../../../../assets/DebitCard.png'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { CreatePayment } from '../../../../services/https';
+import { message } from 'antd';
+import debit from '../../../../assets/DebitCard.png';
+
 const DebitCard: React.FC = () => {
   const [validated, setValidated] = useState(false);
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  // รับข้อมูล workId, bookerUserId, posterUserId, wages จาก state
+  const { workId, bookerUserId, posterUserId, wages } = location.state || { workId: null, bookerUserId: null, posterUserId: null, wages: null };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    } else {
-      // Navigate to /Rating if form is valid
-      navigate('/Rating');
+
+    // ข้ามการตรวจสอบความถูกต้อง
+    event.preventDefault();
+
+    // Gather payment data
+    const paymentData = {
+      work_id: workId,
+      booker_user_id: bookerUserId,
+      poster_user_id: posterUserId,
+      wages: wages,
+    };
+
+    console.log("Sending payment data:", paymentData); // ตรวจสอบข้อมูลที่ส่ง
+
+    try {
+      const response = await CreatePayment(paymentData);
+      if (response && response.status === 200) {
+        message.success("Payment successfully processed!");
+        navigate('/rating', { state: { workId, bookerUserId, posterUserId } });
+      } else {
+        console.error("Payment failed", response);
+        message.error("Payment failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error during payment", error);
+      message.error("Error during payment. Please try again.");
     }
+
     setValidated(true);
   };
 
@@ -35,30 +63,22 @@ const DebitCard: React.FC = () => {
           backgroundColor: "#ffffff",
         }}
       >
-        {/* Display the PromptPay Logo */}
         <div style={{ textAlign: "center", marginBottom: "20px" }}>
-          <img 
-            src={debit} 
-            alt="PromptPay Logo" 
-            style={{ width: "220px" }} 
-          />
+          <img src={debit} alt="Debit Card" style={{ width: "220px" }} />
         </div>
 
-        {/* Form Starts Here */}
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
           <Row className="mb-3 justify-content-center">
             <Form.Group as={Col} md="8" controlId="validationCustom01">
               <Form.Label>Cardholder's Name</Form.Label>
               <Form.Control required type="text" placeholder="Name on card" />
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
           </Row>
-          
+
           <Row className="mb-3 justify-content-center">
             <Form.Group as={Col} md="8" controlId="validationCustom02">
               <Form.Label>Card Number</Form.Label>
               <Form.Control required type="text" placeholder="Card number" />
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
           </Row>
 
@@ -66,27 +86,20 @@ const DebitCard: React.FC = () => {
             <Form.Group as={Col} md="4" controlId="validationCustom03">
               <Form.Label>Expiration Date</Form.Label>
               <Form.Control required type="text" placeholder="MM/YY" />
-              <Form.Control.Feedback type="invalid">
-                Please provide a valid expiration date.
-              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group as={Col} md="4" controlId="validationCustom04">
               <Form.Label>CVV</Form.Label>
               <Form.Control required type="text" placeholder="CVV" />
-              <Form.Control.Feedback type="invalid">
-                Please provide a valid CVV.
-              </Form.Control.Feedback>
             </Form.Group>
           </Row>
 
-          {/* Adjusted Form.Check */}
           <Form.Group className="mb-3" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Form.Check
               required
               label="Agree to terms and conditions"
               feedback="You must agree before submitting."
               feedbackType="invalid"
-              style={{ marginRight: '10px' }} // Adjust margin to control spacing between checkbox and text
+              style={{ marginRight: '10px' }}
             />
           </Form.Group>
 
